@@ -4,6 +4,7 @@ let field = [
    0,0,0,
    0,0,0
   ]
+let first_move_button = true;
 
 function check_win(field) {
   //возвращает значения: 1, если выиграл 'х'; -1, если выиграл 'о';
@@ -23,6 +24,12 @@ function check_win(field) {
 }
 
 function person_move(pos) {
+  //удаляет кнопку первого хода, если она есть
+  if (first_move_button) {
+    first_move_button = false;
+    let button = $('#first_move');
+    button.remove();
+  }
   //делает ход, передает ход компьютеру.
   if (wait == 0) {
     wait = 1; 
@@ -33,7 +40,8 @@ function person_move(pos) {
     ceil.html('');
     ceil.append(img);
     
-    ii_move(pos);
+    if (check_win(field) == 'continue') ii_move(pos);
+    else is_game_over()
   }
 }
 
@@ -45,33 +53,38 @@ function ii_move(pos) {
   let subField = field.slice(0);
   let score;
   //перебирает все возможные ходы, возвращает с наибольшим количеством очков
-  for (let i = 0; i < 9; i++) {
+  outer: for (let i = 0; i < 9; i++) {
     if (subField[i] == 0) {
       //получает количество очков при ходе на позицию i
       subField[i] = 'x';
       console.log(subField);
-      score = minimax(subField, -1);
-      subField[i] = 0;
+      score = return_best_score(subField, -1);
       //сравнивает полученые очки с лучшими
       if (score > best_score) {
         best_score = score;
-        move = i
+        move = i;
+        //сразу ходит, если ход выигрышный
+        if (check_win(subField) == 1) break outer;
       }
+      subField[i] = 0
       console.log(score);
     }
   }
   console.log('--------------------------------------------------')
+  //ставит 'x' на поле
   field[move] = 'x'
   
-  ceil = $(`#ceil_${move}`);
-  img = $(`<img src='image 2.png'>`);
+  let ceil = $(`#ceil_${move}`);
+  let img = $(`<img src='image 2.png'>`);
   ceil.html('');
   ceil.append(img);
   
   wait = 0;
+  //проверка на законченость игры
+  is_game_over();
 }
 
-function minimax(field, player) {
+function return_best_score(field, player) {
   //возвращает количетво очков каждого положения, рекурсивно перебирая все возможные исходы игры
   let best_score = (player ==  1) ? -999999999 : 999999999;
   let score;
@@ -83,7 +96,7 @@ function minimax(field, player) {
   for (let i = 0; i < 9; i++) 
     if (subField[i] == 0) {
       subField[i] = (player == 1) ? 'x' : 'o';
-      score = minimax(subField, -1 * player);
+      score = return_best_score(subField, -1 * player);
       subField[i] = 0;
       if (player == 1 && score > best_score) best_score = score;
       else if (player == -1 && score < best_score) best_score = score;
@@ -93,7 +106,7 @@ function minimax(field, player) {
 
 function ii_first_move() {
   //удаляет кнопку первого хода
-  button = $('#first_move');
+  let button = $('#first_move');
   button.remove();
   //ставит 'x' в любой из углов
   let corners = [0, 2, 6, 8];
@@ -104,4 +117,20 @@ function ii_first_move() {
   img = $(`<img src='image 2.png'>`);
   ceil.html('');
   ceil.append(img);
+}
+
+function is_game_over() {
+//если игра имеет конечное положение, выводит соотвествующую надпись
+  if (check_win(field) != 'continue') {
+    //блокирует поле
+    wait = 1;
+    let text;
+    //выводит надпись
+    if (check_win(field) == 1) text = $('<h1>Победа х</h1>');
+    else if (check_win(field) == -1) text = $('<h1>Победа o</h1>');
+    else text = $('<h1>Ничья</h1>');
+    
+    let board = $('.board');
+    board.append(text);
+  }
 }
