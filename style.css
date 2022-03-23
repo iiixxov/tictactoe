@@ -1,0 +1,51 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  min-width:100%;
+  min-height:100%;
+  font: Arial 14px; 
+}
+
+table {
+  width:328px;
+  height:328px;
+  background-image: url(image.png);
+  text-align: center;
+  
+}
+
+img, td, .ceil {
+   width:80px;
+  height:80px;
+}
+
+.ceil{
+  opacity: 0;
+  transition: all ease 0.4s;
+}
+
+.ceil:hover {
+  opacity: 0.2;
+}
+
+.center {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  align-content: center; 
+  justify-content: center; 
+  overflow: auto; 
+}
+
+#first_move {
+  padding: 15px;
+  background-color: #f5f5f5;
+  transition: all ease 0.2s;
+}
+#first_move:hover {
+  background-color: #FFFFFF;
+}
