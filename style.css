@@ -29,7 +29,7 @@ img, td, .ceil {
   opacity: 0.2;
 }
 
-.center {
+#center {
   position: fixed;
   display: flex-end;
   align-items: center;

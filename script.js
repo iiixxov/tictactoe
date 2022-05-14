@@ -108,12 +108,12 @@ function ii_first_move() {
   //удаляет кнопку первого хода
   let button = $('#first_move');
   button.remove();
-  //ставит 'x' в любой из углов
-  let corners = [0, 2, 6, 8];
-  let corner = corners[Math.floor(Math.random() * corners.length)]
-  field[corner] = 'x';
+  //ставит 'x' в любую из неповторяющихся позиций
+  let moves = [0, 1, 4];
+  let move = moves[Math.floor(Math.random() * 3)]
+  field[move] = 'x';
 
-  ceil = $(`#ceil_${corner}`);
+  ceil = $(`#ceil_${move}`);
   img = $(`<img src='image 2.png'>`);
   ceil.html('');
   ceil.append(img);
